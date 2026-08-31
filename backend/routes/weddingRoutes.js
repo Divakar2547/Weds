@@ -1,0 +1,1 @@
+import { Router } from 'express'; import { getWedding, saveWedding } from '../controllers/weddingController.js'; import { protect } from '../middleware/authMiddleware.js'; const router = Router(); router.get('/', getWedding); router.put('/', protect, saveWedding); export default router
