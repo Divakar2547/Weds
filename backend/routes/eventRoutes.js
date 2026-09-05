@@ -1,1 +1,1 @@
-import resourceRoutes from './resourceRoutes.js'; import controller from '../controllers/eventController.js'; export default resourceRoutes(controller)
+import resourceRoutes from './resourceRoutes.js'; import controller from '../controllers/eventController.js'; import { eventValidation } from '../validators/eventValidator.js'; export default resourceRoutes(controller, eventValidation)

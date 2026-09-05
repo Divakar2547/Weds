@@ -1,1 +1,1 @@
-import resourceRoutes from './resourceRoutes.js'; import controller from '../controllers/settingsController.js'; export default resourceRoutes(controller)
+import resourceRoutes from './resourceRoutes.js'; import controller from '../controllers/settingsController.js'; import { settingsValidation } from '../validators/settingsValidator.js'; export default resourceRoutes(controller, settingsValidation)

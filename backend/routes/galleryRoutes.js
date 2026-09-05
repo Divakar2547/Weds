@@ -1,1 +1,1 @@
-import resourceRoutes from './resourceRoutes.js'; import controller from '../controllers/galleryController.js'; export default resourceRoutes(controller)
+import resourceRoutes from './resourceRoutes.js'; import controller from '../controllers/galleryController.js'; import { galleryValidation } from '../validators/galleryValidator.js'; export default resourceRoutes(controller, galleryValidation)

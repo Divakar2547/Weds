@@ -1,1 +1,1 @@
-import resourceRoutes from './resourceRoutes.js'; import controller from '../controllers/storyController.js'; export default resourceRoutes(controller)
+import resourceRoutes from './resourceRoutes.js'; import controller from '../controllers/storyController.js'; import { storyValidation } from '../validators/storyValidator.js'; export default resourceRoutes(controller, storyValidation)
