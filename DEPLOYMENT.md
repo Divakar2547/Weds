@@ -7,8 +7,6 @@
 3. Set the Render environment values marked `sync: false`:
    - `MONGO_URI`: a production MongoDB connection string (MongoDB Atlas is recommended).
    - `CLIENT_URL`: the Vercel production URL, for example `https://your-site.vercel.app`.
-   - `ADMIN_EMAIL` and `ADMIN_PASSWORD`.
-   - Cloudinary values, if image uploads should persist. Render local storage is temporary, so Cloudinary is required for production image uploads.
 4. Deploy, then confirm `https://your-render-service.onrender.com/health` returns `{ "ok": true }`.
 
 ## Vercel frontend
@@ -21,4 +19,4 @@
 
 ## Local use
 
-Copy `backend/.env.example` to `backend/.env` and fill its values. Then run `npm run seed` and `npm start` inside `backend`. Run `npm run dev` inside `frontend` for the site.
+Copy `backend/.env.example` to `backend/.env` and fill its values. Then run `npm run seed` and `npm start` inside `backend`. Run `npm run dev` inside `frontend` for the site. Images are stored locally when Cloudinary is not configured.

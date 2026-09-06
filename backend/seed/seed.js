@@ -1,14 +1,12 @@
 import 'dotenv/config'
 import mongoose from 'mongoose'
 import connectDb from '../config/db.js'
-import seedAdmin from './seedAdmin.js'
 import seedWedding from './seedWedding.js'
 import seedEvents from './seedEvents.js'
 import seedSettings from './seedSettings.js'
 
 try {
   await connectDb()
-  await seedAdmin()
   await seedWedding()
   await seedEvents()
   await seedSettings()
