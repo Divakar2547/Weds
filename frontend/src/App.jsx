@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { CalendarDays, ChevronDown, Clock3, MapPin, Navigation, Share2 } from 'lucide-react'
 import { wedding } from './data/wedding'
 import { events } from './data/events'
@@ -44,8 +44,17 @@ function useCountdown() {
 
 export default function App() {
   const [language, setLanguage] = useState('en')
+  const [galleryVisible, setGalleryVisible] = useState(false)
+  const galleryRef = useRef(null)
   const t = copy[language]
   const countdown = useCountdown()
+  useEffect(() => {
+    const gallery = galleryRef.current
+    if (!gallery) return undefined
+    const observer = new IntersectionObserver(([entry]) => setGalleryVisible(entry.isIntersecting), { threshold: 0.2 })
+    observer.observe(gallery)
+    return () => observer.disconnect()
+  }, [])
   const eventNames = { engagement: t.engagement, reception: t.reception, wedding: t.wedding }
   const dayDate = new Intl.DateTimeFormat(language === 'ta' ? 'ta-IN' : 'en-GB', { day: '2-digit', month: 'long', year: 'numeric' }).format(target).toUpperCase()
   const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${reception.venue}, ${reception.address}`)}`
@@ -67,8 +76,8 @@ export default function App() {
     <section className="countdown-section"><p className="eyebrow">{t.countdown}</p><div className="countdown">{t.units.map((label, index) => <div key={label}><strong>{countdown[index]}</strong><span>{label}</span></div>)}</div></section>
     <section className="journey" id="story"><div className="section-title"><p className="eyebrow dark">{t.celebration}</p><h2>{t.journey}</h2></div><div className="timeline">{events.map((event) => <article key={event.id}><span className="event-number">{event.number}</span><div className="event-dot" /><p className="event-type">{language === 'ta' ? event.tamilName : event.name}</p><h3>{eventNames[event.id]}</h3><p>{event.date ? new Intl.DateTimeFormat(language === 'ta' ? 'ta-IN' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(`${event.date}T00:00:00`)) : t.coming}</p>{event.time && <p>{language === 'ta' ? 'மாலை 6:00 – 9:00' : event.time}</p>}</article>)}</div></section>
     <section className="reception" id="events"><div><p className="eyebrow">{t.invited}</p><h2>{t.receptionTitle}</h2><p className="reception-text">{t.receptionCopy}</p></div><div className="map-container"><iframe title="Reception venue location" src={googleMapsEmbedUrl} loading="lazy" referrerPolicy="no-referrer-when-downgrade" /></div></section>
-    <section className="gallery" id="gallery"><p className="eyebrow dark">{t.galleryEyebrow}</p><h2>{t.galleryTitle}</h2><div className="gallery-grid" aria-label="Photo gallery"><div /><div /><div /><div /><div /><div /></div></section>
+    <section className={`gallery${galleryVisible ? ' is-visible' : ''}`} id="gallery" ref={galleryRef}><p className="eyebrow dark">{t.galleryEyebrow}</p><h2>{t.galleryTitle}</h2><div className="gallery-grid" aria-label="Photo gallery"><svg className="gallery-arrows" viewBox="0 0 1000 620" preserveAspectRatio="none" aria-hidden="true"><defs><marker id="gallery-arrowhead" markerWidth="12" markerHeight="12" refX="9" refY="5" orient="auto"><path d="M0 0L10 5L0 10" /></marker></defs><g className="desktop-paths"><path className="gallery-path path-one" d="M255 105 C300 90 300 210 325 238" markerEnd="url(#gallery-arrowhead)" /><path className="gallery-path path-two" d="M535 255 C620 330 650 120 735 115" markerEnd="url(#gallery-arrowhead)" /><path className="gallery-path path-three" d="M835 200 C930 220 930 270 850 275" markerEnd="url(#gallery-arrowhead)" /><path className="gallery-path path-four" d="M850 425 C840 525 710 540 690 366" markerEnd="url(#gallery-arrowhead)" /><path className="gallery-path path-five" d="M690 525 C590 610 400 620 325 500" markerEnd="url(#gallery-arrowhead)" /></g><g className="mobile-paths"><path className="gallery-path" d="M500 95 C700 110 700 170 500 205" markerEnd="url(#gallery-arrowhead)" /><path className="gallery-path" d="M500 230 C300 245 300 300 500 315" markerEnd="url(#gallery-arrowhead)" /><path className="gallery-path" d="M500 340 C700 350 700 410 500 420" markerEnd="url(#gallery-arrowhead)" /><path className="gallery-path" d="M500 445 C300 460 300 510 500 525" markerEnd="url(#gallery-arrowhead)" /><path className="gallery-path" d="M500 550 C700 560 700 600 500 615" markerEnd="url(#gallery-arrowhead)" /></g></svg><div className="gallery-card card-one" /><div className="gallery-card card-two" /><div className="gallery-card card-three" /><div className="gallery-card card-four" /><div className="gallery-card card-five" /><div className="gallery-card card-six" /></div></section>
     <section className="venue" id="venue"><p className="eyebrow dark">{t.venueEyebrow}</p><h2>{t.venueTitle}</h2><p>{reception.venue}<br />{reception.address}</p><div className="actions"><button onClick={downloadCalendar}><Share2 size={16} /> {t.save}</button><a href={googleMapsUrl} target="_blank" rel="noreferrer"><MapPin size={16} /> {t.location}</a></div></section>
-    <footer><span>S ♥ H</span><p>HARI PRIYA &amp; SANKAR KUMAR</p><small>14 · 11 · 2026 · {t.footer}</small><div className="reach-us"><b>{t.reachUs}</b><p>{t.contactSoon}</p></div></footer>
+    <footer><span>S ♥ H</span><p>SANKAR KUMAR &amp; HARI PRIYA</p><small>14 · 11 · 2026 · {t.footer}</small><div className="reach-us"><b>{t.reachUs}</b><p>{t.contactSoon}</p></div></footer>
   </main>
 }
