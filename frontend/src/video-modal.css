@@ -1,0 +1,201 @@
+.timeline-video-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 8px 16px;
+  background: rgba(201, 162, 39, 0.08);
+  border: 1px solid var(--gold, #c9a227);
+  border-radius: 24px;
+  color: #594514;
+  font-family: var(--serif, 'Cormorant Garamond', Georgia, serif);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.timeline-video-btn:hover {
+  background: var(--gold, #c9a227);
+  color: #0b0a0f;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(201, 162, 39, 0.35);
+}
+
+.timeline-video-btn .play-icon-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: currentColor;
+  color: #fff;
+  transition: transform 0.2s ease;
+}
+
+.timeline-video-btn:hover .play-icon-circle {
+  background: #0b0a0f;
+  color: var(--gold, #c9a227);
+  transform: scale(1.1);
+}
+
+.timeline-video-btn .play-icon-circle svg {
+  margin-left: 2px;
+}
+
+/* Video Modal Dialog */
+.video-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(11, 10, 15, 0.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 1;
+  animation: modal-fade-in 0.25s ease-out;
+}
+
+.video-modal-container {
+  position: relative;
+  width: 100%;
+  max-width: 860px;
+  background: #171219;
+  border: 1px solid rgba(201, 162, 39, 0.45);
+  border-radius: 12px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9), 0 0 40px rgba(201, 162, 39, 0.2);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.video-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 22px;
+  border-bottom: 1px solid rgba(201, 162, 39, 0.2);
+  background: rgba(11, 10, 15, 0.95);
+}
+
+.video-modal-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: left;
+}
+
+.video-modal-title-group h3 {
+  font-family: var(--serif, 'Cormorant Garamond', Georgia, serif);
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--champ, #e7d39a);
+  margin: 0;
+}
+
+.video-modal-title-group span {
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold, #c9a227);
+}
+
+.video-modal-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(201, 162, 39, 0.35);
+  background: transparent;
+  color: var(--champ, #e7d39a);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.video-modal-close:hover {
+  background: var(--gold, #c9a227);
+  color: #0b0a0f;
+  transform: rotate(90deg);
+}
+
+.video-modal-body {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%; /* 16:9 Aspect Ratio */
+  background: #000;
+}
+
+.video-modal-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.video-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 22px;
+  background: rgba(11, 10, 15, 0.95);
+  border-top: 1px solid rgba(201, 162, 39, 0.15);
+  font-size: 13px;
+  color: #a89f91;
+  font-family: var(--serif, 'Cormorant Garamond', Georgia, serif);
+}
+
+.video-modal-drive-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--champ, #e7d39a);
+  text-decoration: none;
+  border: 1px solid rgba(201, 162, 39, 0.5);
+  padding: 6px 12px;
+  border-radius: 16px;
+  transition: all 0.2s ease;
+}
+
+.video-modal-drive-btn:hover {
+  background: var(--gold, #c9a227);
+  color: #0b0a0f;
+}
+
+@keyframes modal-fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 650px) {
+  .video-modal-header {
+    padding: 12px 16px;
+  }
+  .video-modal-title-group h3 {
+    font-size: 18px;
+  }
+  .video-modal-footer {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 12px 16px;
+  }
+}

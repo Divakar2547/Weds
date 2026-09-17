@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { CalendarDays, ChevronDown, Clock3, MapPin, Navigation, Share2 } from 'lucide-react'
+import { CalendarDays, ChevronDown, Clock3, ExternalLink, MapPin, Navigation, Play, Share2, X } from 'lucide-react'
 import { wedding } from './data/wedding'
 import { events } from './data/events'
 import './App.css'
@@ -7,12 +7,51 @@ import './gallery.css'
 import './map.css'
 import './typography.css'
 import './hero-background.css'
+import './video-modal.css'
+import './engagement-section.css'
 
+function getEmbedVideoUrl(url) {
+  if (!url) return ''
+  if (url.includes('drive.google.com')) {
+    const fileIdMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/)
+    if (fileIdMatch && fileIdMatch[1]) {
+      return `https://drive.google.com/file/d/${fileIdMatch[1]}/preview`
+    }
+    const idParamMatch = url.match(/[?&]id=([a-zA-Z0-9_-]+)/)
+    if (idParamMatch && idParamMatch[1]) {
+      return `https://drive.google.com/file/d/${idParamMatch[1]}/preview`
+    }
+  }
+  if (url.includes('youtube.com/watch') || url.includes('youtu.be/')) {
+    const ytMatch = url.match(/(?:youtu\.be\/|watch\?v=)([a-zA-Z0-9_-]+)/)
+    if (ytMatch && ytMatch[1]) {
+      return `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1`
+    }
+  }
+  return url
+}
+
+function getDirectVideoUrl(url) {
+  if (!url) return ''
+  if (url.includes('drive.google.com')) {
+    const fileIdMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/)
+    if (fileIdMatch && fileIdMatch[1]) {
+      return `https://drive.google.com/file/d/${fileIdMatch[1]}/view`
+    }
+    const idParamMatch = url.match(/[?&]id=([a-zA-Z0-9_-]+)/)
+    if (idParamMatch && idParamMatch[1]) {
+      return `https://drive.google.com/file/d/${idParamMatch[1]}/view`
+    }
+  }
+  return url
+}
+
+const engagementEvent = events.find((event) => event.id === 'engagement')
 const reception = events.find((event) => event.id === 'reception')
 const target = new Date(`${reception.date}T18:00:00`)
 const copy = {
   en: {
-    nav: ['Our story', 'Events', 'Gallery', 'Venue'], blessings: 'WITH THE BLESSINGS OF OUR FAMILIES', receptionTamil: 'Reception celebration',
+    nav: ['Our story', 'Engagement Film', 'Events', 'Gallery', 'Venue'], blessings: 'WITH THE BLESSINGS OF OUR FAMILIES', receptionTamil: 'Reception celebration',
     month: 'NOVEMBER', day: 'SATURDAY · 2026', receptionTime: 'RECEPTION · 6:00 PM – 9:00 PM',
     joy: 'A JOYOUS CELEBRATION', title: <>Two souls, one<br /><em>beautiful</em> journey.</>,
     invite: 'With grateful hearts and the blessings of our beloved families, we invite you to share in the beginning of our new chapter together.',
@@ -21,9 +60,11 @@ const copy = {
     engagement: 'Engagement', wedding: 'Wedding', reception: 'Reception', coming: 'Details coming soon', invited: 'YOU ARE INVITED TO', receptionTitle: <>The <em>reception</em></>,
     receptionCopy: <>Your presence is compulsory...<br />Your blessings are mandatory...<br />Your attendance is highly recommended...<br />And your dancing is highly appreciated...!!!</>, receptionLabel: 'Reception', date: 'Saturday, 14 November 2026', directions: 'Get directions',
     venueEyebrow: 'CELEBRATE WITH US', venueTitle: <>A gathering to<br /><em>remember</em></>, save: 'Save the date', location: 'View location', footer: 'RECEPTION', galleryEyebrow: 'OUR MOMENTS', galleryTitle: <>Moments to <em>treasure</em></>, reachUs: 'REACH US', contactSoon: 'Contact details will be shared soon.',
+    watchVideo: 'Watch Video', openInDrive: 'Open in Google Drive', closeVideo: 'Close', videoCelebration: 'Ceremony Highlights',
+    videoEyebrow: 'MOMENTS FROM OUR ENGAGEMENT', videoTitle: <>The Engagement <em>Film</em></>, videoDesc: 'A glimpse of love, laughter, and the sacred promise made on 13 September 2026.', videoBadge: '13 SEPTEMBER 2026 · ENGAGEMENT'
   },
   ta: {
-    nav: ['எங்கள் கதை', 'நிகழ்வுகள்', 'புகைப்படங்கள்', 'இடம்'], blessings: 'எங்கள் குடும்பங்களின் ஆசியுடன்', receptionTamil: 'வரவேற்பு விழா',
+    nav: ['எங்கள் கதை', 'காணொளி', 'நிகழ்வுகள்', 'புகைப்படங்கள்', 'இடம்'], blessings: 'எங்கள் குடும்பங்களின் ஆசியுடன்', receptionTamil: 'வரவேற்பு விழா',
     month: 'நவம்பர்', day: 'சனிக்கிழமை · 2026', receptionTime: 'வரவேற்பு · மாலை 6:00 – 9:00',
     joy: 'மகிழ்ச்சியான கொண்டாட்டம்', title: <>இரு உள்ளங்கள்,<br /><em>அழகிய</em> பயணம்.</>,
     invite: 'எங்கள் அன்பான குடும்பங்களின் ஆசியுடன், எங்கள் வாழ்வின் புதிய அத்தியாயத்தை உங்களுடன் இணைந்து கொண்டாட அன்புடன் அழைக்கிறோம்.',
@@ -32,6 +73,8 @@ const copy = {
     engagement: 'நிச்சயதார்த்தம்', wedding: 'திருமணம்', reception: 'வரவேற்பு', coming: 'விவரங்கள் விரைவில்', invited: 'உங்களை அன்புடன் அழைக்கிறோம்', receptionTitle: <><em>வரவேற்பு</em> விழா</>,
     receptionCopy: 'அன்பு, சிரிப்பு மற்றும் மகிழ்ச்சியால் நிறைந்த இந்த இனிய மாலைப் பொழுதில் எங்களுடன் இணைந்திருங்கள்.', receptionLabel: 'வரவேற்பு', date: 'சனிக்கிழமை, 14 நவம்பர் 2026', directions: 'வழிகாட்டுதல்',
     venueEyebrow: 'எங்களுடன் கொண்டாடுங்கள்', venueTitle: <>மறக்க முடியாத<br /><em>ஒரு சந்திப்பு</em></>, save: 'தேதியைச் சேமிக்கவும்', location: 'இடத்தைக் காண்க', footer: 'வரவேற்பு விழா', galleryEyebrow: 'எங்கள் நினைவுகள்', galleryTitle: <>பொக்கிஷமான <em>தருணங்கள்</em></>, reachUs: 'தொடர்புக்கு', contactSoon: 'தொடர்பு விவரங்கள் விரைவில் பகிரப்படும்.',
+    watchVideo: 'காணொளி காண்க', openInDrive: 'கூகுள் டிரைவில் திறக்க', closeVideo: 'மூடு', videoCelebration: 'விழா சிறப்புகள்',
+    videoEyebrow: 'எங்கள் நிச்சயதார்த்தம்', videoTitle: <>நிச்சயதார்த்த <em>காணொளி</em></>, videoDesc: 'எங்களின் புதிய வாழ்வின் இனிய தொடக்கத்தையும், நெஞ்சார்ந்த தருணங்களையும் கண்டு மகிழுங்கள்.', videoBadge: '13 செப்டம்பர் 2026 · நிச்சயதார்த்தம்'
   },
 }
 
@@ -45,9 +88,11 @@ function useCountdown() {
 export default function App() {
   const [language, setLanguage] = useState('en')
   const [galleryVisible, setGalleryVisible] = useState(false)
+  const [activeVideo, setActiveVideo] = useState(null)
   const galleryRef = useRef(null)
   const t = copy[language]
   const countdown = useCountdown()
+
   useEffect(() => {
     const gallery = galleryRef.current
     if (!gallery) return undefined
@@ -55,6 +100,23 @@ export default function App() {
     observer.observe(gallery)
     return () => observer.disconnect()
   }, [])
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') setActiveVideo(null)
+    }
+    if (activeVideo) {
+      document.body.style.overflow = 'hidden'
+      window.addEventListener('keydown', handleKeyDown)
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [activeVideo])
+
   const eventNames = { engagement: t.engagement, reception: t.reception, wedding: t.wedding }
   const dayDate = new Intl.DateTimeFormat(language === 'ta' ? 'ta-IN' : 'en-GB', { day: '2-digit', month: 'long', year: 'numeric' }).format(target).toUpperCase()
   const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${reception.venue}, ${reception.address}`)}`
@@ -69,15 +131,96 @@ export default function App() {
     URL.revokeObjectURL(url)
   }
   const saveDate = () => navigator.clipboard?.writeText(`${wedding.brideName} & ${wedding.groomName} — ${t.reception} — ${dayDate}`)
+
   return <main lang={language}>
-    <nav className="nav"><a className="monogram" href="#home">S<span>♥</span>H</a><div className="nav-links"><a href="#story">{t.nav[0]}</a><a href="#events">{t.nav[1]}</a><a href="#gallery">{t.nav[2]}</a><a href="#venue">{t.nav[3]}</a></div><button className="language" onClick={() => setLanguage(language === 'en' ? 'ta' : 'en')}>{language === 'en' ? 'தமிழ்' : 'EN'}</button></nav>
+    <nav className="nav">
+      <a className="monogram" href="#home">S<span>♥</span>H</a>
+      <div className="nav-links">
+        <a href="#story">{t.nav[0]}</a>
+        <a href="#engagement-film">{t.nav[1]}</a>
+        <a href="#events">{t.nav[2]}</a>
+        <a href="#gallery">{t.nav[3]}</a>
+        <a href="#venue">{t.nav[4]}</a>
+      </div>
+      <button className="language" onClick={() => setLanguage(language === 'en' ? 'ta' : 'en')}>{language === 'en' ? 'தமிழ்' : 'EN'}</button>
+    </nav>
     <section className="hero" id="home"><div className="arch arch-left" /><div className="arch arch-right" /><p className="eyebrow">{t.blessings}</p><div className="leaf-line">✦</div><h1>{wedding.groomName}<span>&amp;</span>{wedding.brideName}</h1><p className="hero-tamil">{t.receptionTamil}</p><div className="date-block"><span>14</span><div><b>{t.month}</b><small>{t.day}</small></div><span>26</span></div><p className="hero-reception">{t.receptionTime}</p><a className="down" href="#invitation" aria-label="Scroll"><ChevronDown size={19} /></a></section>
     <section className="invitation" id="invitation"><p className="eyebrow dark" style={{ fontSize: 13 }}>CHOSEN BY FAMILY, BLESSED BY GOD, UNITED BY OUR HEARTS</p><p className="copy" style={{ fontSize: 23 }}>Bound by destiny and blessed by family, two souls begin a lifetime of togetherness. Your presence and heartfelt wishes will make this special day truly unforgettable.</p><p className="copy" style={{ fontSize: 23, marginTop: 22 }}>Come bless the newlyweds and make some noise—from a beautiful hello to a lifetime of togetherness.</p><div className="lotus">✦</div></section>
     <section className="countdown-section"><p className="eyebrow">{t.countdown}</p><div className="countdown">{t.units.map((label, index) => <div key={label}><strong>{countdown[index]}</strong><span>{label}</span></div>)}</div></section>
-    <section className="journey" id="story"><div className="section-title"><p className="eyebrow dark">{t.celebration}</p><h2>{t.journey}</h2></div><div className="timeline">{events.map((event) => <article key={event.id}><span className="event-number">{event.number}</span><div className="event-dot" /><p className="event-type">{language === 'ta' ? event.tamilName : event.name}</p><h3>{eventNames[event.id]}</h3><p>{event.date ? new Intl.DateTimeFormat(language === 'ta' ? 'ta-IN' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(`${event.date}T00:00:00`)) : t.coming}</p>{event.time && <p>{language === 'ta' ? 'மாலை 6:00 – 9:00' : event.time}</p>}</article>)}</div></section>
+    <section className="journey" id="story"><div className="section-title"><p className="eyebrow dark">{t.celebration}</p><h2>{t.journey}</h2></div><div className="timeline">{events.map((event) => <article key={event.id}><span className="event-number">{event.number}</span><div className="event-dot" /><p className="event-type">{language === 'ta' ? event.tamilName : event.name}</p><h3>{eventNames[event.id]}</h3><p>{event.date ? new Intl.DateTimeFormat(language === 'ta' ? 'ta-IN' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(`${event.date}T00:00:00`)) : t.coming}</p>{event.time && <p>{language === 'ta' ? 'மாலை 6:00 – 9:00' : event.time}</p>}{event.videoUrl && <button type="button" className="timeline-video-btn" onClick={() => setActiveVideo(event)} aria-label={t.watchVideo}><span className="play-icon-circle"><Play size={11} fill="currentColor" /></span><span>{t.watchVideo}</span></button>}</article>)}</div></section>
+    
+    <section className="engagement-video-section" id="engagement-film">
+      <div className="section-title">
+        <p className="eyebrow">{t.videoEyebrow}</p>
+        <h2>{t.videoTitle}</h2>
+        <p className="engagement-video-desc">{t.videoDesc}</p>
+      </div>
+      <div className="engagement-cinema-frame">
+        <div className="engagement-video-wrapper">
+          <iframe
+            title="Engagement Ceremony Film"
+            src={getEmbedVideoUrl(engagementEvent?.videoUrl)}
+            allow="autoplay; encrypted-media; fullscreen"
+            allowFullScreen
+          />
+        </div>
+        <div className="engagement-video-bar">
+          <span className="engagement-badge">✦ {t.videoBadge}</span>
+          {engagementEvent?.videoUrl && (
+            <a
+              href={getDirectVideoUrl(engagementEvent.videoUrl)}
+              target="_blank"
+              rel="noreferrer"
+              className="engagement-drive-link"
+            >
+              <ExternalLink size={14} /> {t.openInDrive}
+            </a>
+          )}
+        </div>
+      </div>
+    </section>
+
     <section className="reception" id="events"><div><p className="eyebrow">{t.invited}</p><h2>{t.receptionTitle}</h2><p className="reception-text">{t.receptionCopy}</p></div><div className="map-container"><iframe title="Reception venue location" src={googleMapsEmbedUrl} loading="lazy" referrerPolicy="no-referrer-when-downgrade" /></div></section>
     <section className={`gallery${galleryVisible ? ' is-visible' : ''}`} id="gallery" ref={galleryRef}><p className="eyebrow dark">{t.galleryEyebrow}</p><h2>{t.galleryTitle}</h2><div className="gallery-grid" aria-label="Photo gallery"><svg className="gallery-arrows" viewBox="0 0 1000 620" preserveAspectRatio="none" aria-hidden="true"><defs><marker id="gallery-arrowhead" markerWidth="12" markerHeight="12" refX="9" refY="5" orient="auto"><path d="M0 0L10 5L0 10" /></marker></defs><g className="desktop-paths"><path className="gallery-path path-one" d="M255 105 C300 90 300 210 325 238" markerEnd="url(#gallery-arrowhead)" /><path className="gallery-path path-two" d="M535 255 C620 330 650 120 735 115" markerEnd="url(#gallery-arrowhead)" /><path className="gallery-path path-three" d="M835 200 C930 220 930 270 850 275" markerEnd="url(#gallery-arrowhead)" /><path className="gallery-path path-four" d="M850 425 C840 525 710 540 690 366" markerEnd="url(#gallery-arrowhead)" /><path className="gallery-path path-five" d="M690 525 C590 610 400 620 325 500" markerEnd="url(#gallery-arrowhead)" /></g><g className="mobile-paths"><path className="gallery-path" d="M500 95 C700 110 700 170 500 205" markerEnd="url(#gallery-arrowhead)" /><path className="gallery-path" d="M500 230 C300 245 300 300 500 315" markerEnd="url(#gallery-arrowhead)" /><path className="gallery-path" d="M500 340 C700 350 700 410 500 420" markerEnd="url(#gallery-arrowhead)" /><path className="gallery-path" d="M500 445 C300 460 300 510 500 525" markerEnd="url(#gallery-arrowhead)" /><path className="gallery-path" d="M500 550 C700 560 700 600 500 615" markerEnd="url(#gallery-arrowhead)" /></g></svg><div className="gallery-card card-one" /><div className="gallery-card card-two" /><div className="gallery-card card-three" /><div className="gallery-card card-four" /><div className="gallery-card card-five" /><div className="gallery-card card-six" /></div></section>
     <section className="venue" id="venue"><p className="eyebrow dark">{t.venueEyebrow}</p><h2>{t.venueTitle}</h2><p>{reception.venue}<br />{reception.address}</p><div className="actions"><button onClick={downloadCalendar}><Share2 size={16} /> {t.save}</button><a href={googleMapsUrl} target="_blank" rel="noreferrer"><MapPin size={16} /> {t.location}</a></div></section>
     <footer><span>S ♥ H</span><p>SANKAR KUMAR &amp; HARI PRIYA</p><small>14 · 11 · 2026 · {t.footer}</small><div className="reach-us"><b>{t.reachUs}</b><p>{t.contactSoon}</p></div></footer>
+
+    {activeVideo && (
+      <div className="video-modal-backdrop" onClick={() => setActiveVideo(null)} role="dialog" aria-modal="true">
+        <div className="video-modal-container" onClick={(e) => e.stopPropagation()}>
+          <div className="video-modal-header">
+            <div className="video-modal-title-group">
+              <span>{t.videoCelebration}</span>
+              <h3>{eventNames[activeVideo.id] || activeVideo.name}</h3>
+            </div>
+            <button type="button" className="video-modal-close" onClick={() => setActiveVideo(null)} aria-label={t.closeVideo}>
+              <X size={18} />
+            </button>
+          </div>
+          <div className="video-modal-body">
+            <iframe
+              title={`${eventNames[activeVideo.id] || activeVideo.name} Video`}
+              src={getEmbedVideoUrl(activeVideo.videoUrl)}
+              className="video-modal-iframe"
+              allow="autoplay; encrypted-media; fullscreen"
+              allowFullScreen
+            />
+          </div>
+          <div className="video-modal-footer">
+            <span>{wedding.groomName} &amp; {wedding.brideName}</span>
+            <a
+              href={getDirectVideoUrl(activeVideo.videoUrl)}
+              target="_blank"
+              rel="noreferrer"
+              className="video-modal-drive-btn"
+            >
+              <ExternalLink size={13} /> {t.openInDrive}
+            </a>
+          </div>
+        </div>
+      </div>
+    )}
   </main>
 }
+
+
