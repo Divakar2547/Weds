@@ -1,0 +1,4 @@
+frontend/src/assets/**/*.mp4
+frontend/src/assets/**/*.mov
+frontend/src/assets/**/*.webm
+frontend/src/assets/**/*.avi
