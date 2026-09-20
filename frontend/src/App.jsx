@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { CalendarDays, ChevronDown, Clock3, ExternalLink, MapPin, Navigation, Play, Share2, X } from 'lucide-react'
+import engagementPoster from './assets/img1.png'
 import { wedding } from './data/wedding'
 import { events } from './data/events'
 import './App.css'
@@ -44,6 +45,10 @@ function getDirectVideoUrl(url) {
     }
   }
   return url
+}
+
+function isDirectVideoUrl(url) {
+  return typeof url === 'string' && /\.(mp4|webm|ogg|mov|m4v)(\?.*)?$/i.test(url)
 }
 
 const engagementEvent = events.find((event) => event.id === 'engagement')
@@ -156,17 +161,33 @@ export default function App() {
         <p className="engagement-video-desc">{t.videoDesc}</p>
       </div>
       <div className="engagement-cinema-frame">
-        <div className="engagement-video-wrapper">
-          <iframe
-            title="Engagement Ceremony Film"
-            src={getEmbedVideoUrl(engagementEvent?.videoUrl)}
-            allow="autoplay; encrypted-media; fullscreen"
-            allowFullScreen
-          />
+        <div className="iphone-16-frame">
+          <div className="iphone-16-notch" aria-hidden="true" />
+          <div className="engagement-video-wrapper">
+            {isDirectVideoUrl(engagementEvent?.videoUrl) ? (
+              <video
+                key={engagementEvent.videoUrl}
+                controls
+                playsInline
+                preload="metadata"
+                poster={engagementPoster}
+                className="engagement-video-player"
+              >
+                <source src={engagementEvent.videoUrl} />
+              </video>
+            ) : (
+              <iframe
+                title="Engagement Ceremony Film"
+                src={getEmbedVideoUrl(engagementEvent?.videoUrl)}
+                allow="autoplay; encrypted-media; fullscreen"
+                allowFullScreen
+              />
+            )}
+          </div>
         </div>
         <div className="engagement-video-bar">
           <span className="engagement-badge">✦ {t.videoBadge}</span>
-          {engagementEvent?.videoUrl && (
+          {engagementEvent?.videoUrl && !isDirectVideoUrl(engagementEvent.videoUrl) && (
             <a
               href={getDirectVideoUrl(engagementEvent.videoUrl)}
               target="_blank"
@@ -198,24 +219,39 @@ export default function App() {
             </button>
           </div>
           <div className="video-modal-body">
-            <iframe
-              title={`${eventNames[activeVideo.id] || activeVideo.name} Video`}
-              src={getEmbedVideoUrl(activeVideo.videoUrl)}
-              className="video-modal-iframe"
-              allow="autoplay; encrypted-media; fullscreen"
-              allowFullScreen
-            />
+            {isDirectVideoUrl(activeVideo.videoUrl) ? (
+              <video
+                key={activeVideo.videoUrl}
+                controls
+                playsInline
+                preload="metadata"
+                poster={engagementPoster}
+                className="video-modal-video"
+              >
+                <source src={activeVideo.videoUrl} />
+              </video>
+            ) : (
+              <iframe
+                title={`${eventNames[activeVideo.id] || activeVideo.name} Video`}
+                src={getEmbedVideoUrl(activeVideo.videoUrl)}
+                className="video-modal-iframe"
+                allow="autoplay; encrypted-media; fullscreen"
+                allowFullScreen
+              />
+            )}
           </div>
           <div className="video-modal-footer">
             <span>{wedding.groomName} &amp; {wedding.brideName}</span>
-            <a
-              href={getDirectVideoUrl(activeVideo.videoUrl)}
-              target="_blank"
-              rel="noreferrer"
-              className="video-modal-drive-btn"
-            >
-              <ExternalLink size={13} /> {t.openInDrive}
-            </a>
+            {!isDirectVideoUrl(activeVideo.videoUrl) && (
+              <a
+                href={getDirectVideoUrl(activeVideo.videoUrl)}
+                target="_blank"
+                rel="noreferrer"
+                className="video-modal-drive-btn"
+              >
+                <ExternalLink size={13} /> {t.openInDrive}
+              </a>
+            )}
           </div>
         </div>
       </div>

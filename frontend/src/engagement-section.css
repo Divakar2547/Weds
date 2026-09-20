@@ -42,32 +42,89 @@
 }
 
 .engagement-cinema-frame {
-  max-width: 920px;
+  max-width: 980px;
   margin: 0 auto;
-  background: #151017;
-  border: 1px solid rgba(201, 162, 39, 0.45);
-  border-radius: 16px;
-  padding: 12px;
+  background: rgba(21, 16, 23, 0.6);
+  border: 1px solid rgba(201, 162, 39, 0.35);
+  border-radius: 28px;
+  padding: 18px 18px 10px;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8), 0 0 50px rgba(201, 162, 39, 0.15);
   position: relative;
+}
+
+.iphone-16-frame {
+  position: relative;
+  width: min(100%, 560px);
+  margin: 0 auto;
+  padding: 18px 12px 12px;
+  border-radius: 34px;
+  background: linear-gradient(145deg, #1a1a1d 0%, #05070b 60%, #0a0b11 100%);
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05), inset 0 18px 28px rgba(255, 255, 255, 0.04), 0 22px 60px rgba(0, 0, 0, 0.75);
+}
+
+.iphone-16-frame::before,
+.iphone-16-frame::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 110px;
+  border-radius: 4px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.15), rgba(13,15,20,0.8), rgba(255,255,255,0.08));
+}
+
+.iphone-16-frame::before {
+  left: -8px;
+}
+
+.iphone-16-frame::after {
+  right: -8px;
+}
+
+.iphone-16-notch {
+  position: absolute;
+  left: 50%;
+  top: 10px;
+  transform: translateX(-50%);
+  width: 38%;
+  height: 22px;
+  background: #020305;
+  border-radius: 0 0 18px 18px;
+  box-shadow: inset 0 -1px 0 rgba(255,255,255,0.08);
+  z-index: 2;
 }
 
 .engagement-video-wrapper {
   position: relative;
   width: 100%;
   padding-top: 56.25%; /* 16:9 Aspect Ratio */
-  border-radius: 10px;
+  border-radius: 18px;
   overflow: hidden;
   background: #000;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
 }
 
-.engagement-video-wrapper iframe {
+.engagement-video-wrapper iframe,
+.engagement-video-wrapper video,
+.video-modal-body video,
+.video-modal-body iframe {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   border: 0;
+  object-fit: cover;
+  background: #000;
+}
+
+.engagement-video-player,
+.video-modal-video {
+  display: block;
+  background: #000;
 }
 
 .engagement-video-bar {
