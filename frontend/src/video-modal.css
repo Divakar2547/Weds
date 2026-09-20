@@ -64,24 +64,45 @@
 
 .video-modal-container {
   position: relative;
-  width: 100%;
-  max-width: 860px;
-  background: #171219;
-  border: 1px solid rgba(201, 162, 39, 0.45);
-  border-radius: 12px;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9), 0 0 40px rgba(201, 162, 39, 0.2);
+  width: min(90vw, 680px);
+  background: linear-gradient(145deg, #141418 0%, #090a0f 45%, #111318 100%);
+  border: 2px solid rgba(201, 162, 39, 0.5);
+  border-radius: 28px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.95), 0 0 40px rgba(201, 162, 39, 0.2);
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  padding: 12px 12px 0;
+}
+
+.video-modal-container::before,
+.video-modal-container::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 120px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.15), rgba(10,10,12,0.9), rgba(255,255,255,0.08));
+  border-radius: 4px;
+}
+
+.video-modal-container::before {
+  left: -7px;
+}
+
+.video-modal-container::after {
+  right: -7px;
 }
 
 .video-modal-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 22px;
+  padding: 18px 22px 12px;
   border-bottom: 1px solid rgba(201, 162, 39, 0.2);
   background: rgba(11, 10, 15, 0.95);
+  border-radius: 20px 20px 0 0;
 }
 
 .video-modal-title-group {
@@ -110,11 +131,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   border: 1px solid rgba(201, 162, 39, 0.35);
-  background: transparent;
+  background: rgba(255, 255, 255, 0.02);
   color: var(--champ, #e7d39a);
   cursor: pointer;
   transition: all 0.2s ease;
@@ -131,27 +152,38 @@
   width: 100%;
   padding-top: 56.25%; /* 16:9 Aspect Ratio */
   background: #000;
+  border-radius: 0;
+  overflow: hidden;
+  border-left: 1px solid rgba(255, 255, 255, 0.05);
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.video-modal-iframe {
+.video-modal-iframe,
+.video-modal-video {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   border: 0;
+  background: #000;
+}
+
+.video-modal-video {
+  object-fit: cover;
 }
 
 .video-modal-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 22px;
+  padding: 14px 22px 20px;
   background: rgba(11, 10, 15, 0.95);
   border-top: 1px solid rgba(201, 162, 39, 0.15);
   font-size: 13px;
   color: #a89f91;
   font-family: var(--serif, 'Cormorant Garamond', Georgia, serif);
+  border-radius: 0 0 24px 24px;
 }
 
 .video-modal-drive-btn {
