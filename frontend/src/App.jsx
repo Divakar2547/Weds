@@ -185,16 +185,6 @@ export default function App() {
         </div>
         <div className="engagement-video-bar">
           <span className="engagement-badge">✦ {t.videoBadge}</span>
-          {engagementEvent?.videoUrl && !isDirectVideoUrl(engagementEvent.videoUrl) && (
-            <a
-              href={getDirectVideoUrl(engagementEvent.videoUrl)}
-              target="_blank"
-              rel="noreferrer"
-              className="engagement-drive-link"
-            >
-              <ExternalLink size={14} /> {t.openInDrive}
-            </a>
-          )}
         </div>
       </div>
     </section>
@@ -239,16 +229,6 @@ export default function App() {
           </div>
           <div className="video-modal-footer">
             <span>{wedding.groomName} &amp; {wedding.brideName}</span>
-            {!isDirectVideoUrl(activeVideo.videoUrl) && (
-              <a
-                href={getDirectVideoUrl(activeVideo.videoUrl)}
-                target="_blank"
-                rel="noreferrer"
-                className="video-modal-drive-btn"
-              >
-                <ExternalLink size={13} /> {t.openInDrive}
-              </a>
-            )}
           </div>
         </div>
       </div>
