@@ -64,7 +64,7 @@ const copy = {
     engagement: 'Engagement', wedding: 'Wedding', reception: 'Reception', coming: 'Details coming soon', invited: 'YOU ARE INVITED TO', receptionTitle: <>The <em>reception</em></>,
     receptionCopy: <>Your presence is compulsory...<br />Your blessings are mandatory...<br />Your attendance is highly recommended...<br />And your dancing is highly appreciated...!!!</>, receptionLabel: 'Reception', date: 'Saturday, 14 November 2026', directions: 'Get directions',
     venueEyebrow: 'CELEBRATE WITH US', venueTitle: <>A gathering to<br /><em>remember</em></>, save: 'Save the date', location: 'View location', footer: 'RECEPTION', galleryEyebrow: 'OUR MOMENTS', galleryTitle: <>Moments to <em>treasure</em></>, reachUs: 'REACH US', contactSoon: 'Contact details will be shared soon.',
-    watchVideo: 'Watch Video', openInDrive: 'Open in Google Drive', closeVideo: 'Close', videoCelebration: 'Ceremony Highlights',
+    watchVideo: 'Watch Video', closeVideo: 'Close', videoCelebration: 'Ceremony Highlights',
     videoEyebrow: 'MOMENTS FROM OUR ENGAGEMENT', videoTitle: <>The Engagement <em>Film</em></>, videoDesc: 'A glimpse of love, laughter, and the sacred promise made on 13 September 2026.', videoBadge: '13 SEPTEMBER 2026 · ENGAGEMENT'
   },
   ta: {
@@ -77,7 +77,7 @@ const copy = {
     engagement: 'நிச்சயதார்த்தம்', wedding: 'திருமணம்', reception: 'வரவேற்பு', coming: 'விவரங்கள் விரைவில்', invited: 'உங்களை அன்புடன் அழைக்கிறோம்', receptionTitle: <><em>வரவேற்பு</em> விழா</>,
     receptionCopy: 'அன்பு, சிரிப்பு மற்றும் மகிழ்ச்சியால் நிறைந்த இந்த இனிய மாலைப் பொழுதில் எங்களுடன் இணைந்திருங்கள்.', receptionLabel: 'வரவேற்பு', date: 'சனிக்கிழமை, 14 நவம்பர் 2026', directions: 'வழிகாட்டுதல்',
     venueEyebrow: 'எங்களுடன் கொண்டாடுங்கள்', venueTitle: <>மறக்க முடியாத<br /><em>ஒரு சந்திப்பு</em></>, save: 'தேதியைச் சேமிக்கவும்', location: 'இடத்தைக் காண்க', footer: 'வரவேற்பு விழா', galleryEyebrow: 'எங்கள் நினைவுகள்', galleryTitle: <>பொக்கிஷமான <em>தருணங்கள்</em></>, reachUs: 'தொடர்புக்கு', contactSoon: 'தொடர்பு விவரங்கள் விரைவில் பகிரப்படும்.',
-    watchVideo: 'காணொளி காண்க', openInDrive: 'கூகுள் டிரைவில் திறக்க', closeVideo: 'மூடு', videoCelebration: 'விழா சிறப்புகள்',
+    watchVideo: 'காணொளி காண்க', closeVideo: 'மூடு', videoCelebration: 'விழா சிறப்புகள்',
     videoEyebrow: 'எங்கள் நிச்சயதார்த்தம்', videoTitle: <>நிச்சயதார்த்த <em>காணொளி</em></>, videoDesc: 'எங்களின் புதிய வாழ்வின் இனிய தொடக்கத்தையும், நெஞ்சார்ந்த தருணங்களையும் கண்டு மகிழுங்கள்.', videoBadge: '13 செப்டம்பர் 2026 · நிச்சயதார்த்தம்'
   },
 }
