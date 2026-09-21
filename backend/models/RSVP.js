@@ -1,2 +1,0 @@
-import mongoose from 'mongoose'
-export default mongoose.model('RSVP', new mongoose.Schema({ name: { type: String, required: true, trim: true }, phone: String, email: { type: String, lowercase: true }, attending: { type: String, enum: ['yes', 'no', 'maybe'], required: true }, guests: { type: Number, min: 0, max: 20, default: 1 }, message: String, status: { type: String, enum: ['new', 'contacted', 'confirmed'], default: 'new' } }, { timestamps: true, versionKey: false }))
